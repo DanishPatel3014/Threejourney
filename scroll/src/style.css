@@ -1,0 +1,23 @@
+
+*{
+box-sizing: border-box;
+}
+body{
+    height: 100vh;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+.s
+{
+    height: 100vh;
+    padding: 10em;
+}
+.s1
+{
+    background-color: blanchedalmond;
+}
+.s2
+{
+    background-color:blue;
+}

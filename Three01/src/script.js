@@ -1,25 +1,52 @@
 import * as THREE from 'three'
-console.log(THREE);
+
+
+// Canvas
+const canvas = document.querySelector('canvas.webgl')
 
 // Scence
 const scene = new THREE.Scene();
 // Cube
-const geometry = new THREE.BoxGeometry(1,1,1);
-const material = new THREE.MeshBasicMaterial({color:'#8B0C3C'});
-const mesh = new THREE.Mesh(geometry,material);
-scene.add(mesh)
+const group = new THREE.Group()
+scene.add(group)
+
+
+
+const cube1 = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial({ color: '#ff0000' })
+)
+group.add(cube1)
+
+
+const cube2 = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial({ color: '#705DF2' })
+)
+group.add(cube2)
+
+
+// Axes Helper
+const axesHelper = new THREE.AxesHelper();
+scene.add(axesHelper)
+
 // Sizes
 const size = {
-    width : '600',
-    height : '800'
+    width : '800',
+    height : '600'
 }
 // Camera
 const camera = new THREE.PerspectiveCamera(75,size.width/size.height)
 camera.position.z = 3;
+// camera.position.x = 1;
+// camera.position.y = 1;
 scene.add(camera);
+
+
+// camera.lookAt(mesh.position)
 // Render
 const renderer = new THREE.WebGLRenderer({
-    canvas : document.querySelector('canvas.webgl')
+    canvas : canvas
 })
 
 renderer.setSize(size.width,size.height)
