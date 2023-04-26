@@ -4,12 +4,17 @@ import gsap from "gsap";
 import * as dat from "lil-gui";
 
 // textures
-const image = new Image()
-const texture = new THREE.Texture(image)
-image.onload = () => {
-texture.needsUpdate = true
-}
-image.src = '/textures/door/color.jpg'
+// const image = new Image()
+// const texture = new THREE.Texture(image)
+// image.onload = () => {
+// texture.needsUpdate = true
+// }
+// image.src = '/textures/door/color.jpg'
+
+const textureLoader = new THREE.TextureLoader
+const texture = textureLoader.load('/textures/door/paper.jpg')
+
+texture.minFilter = THREE.NearestFilter
 
 // debug
 const gui = new dat.GUI();
@@ -96,11 +101,11 @@ gui
 .add(mesh, 'visible')
 gui
 .add(mesh.material, 'wireframe')
-gui
-.addColor(parameters, 'color')
-.onChange(() => {
-  mesh.material.color.set(parameters.color)
-})
+// gui
+// .addColor(parameters, 'color')
+// .onChange(() => {
+//   mesh.material.color.set(parameters.color)
+// })
 gui
 .add(parameters,'spin')
 // camera
