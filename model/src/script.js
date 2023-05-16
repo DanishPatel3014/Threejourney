@@ -29,16 +29,11 @@ const gltfLoader = new GLTFLoader()
 gltfLoader.load(
     // '/models/Man/glTF/Man.gltf',
     // '/models/Duck/glTF/Duck.gltf',
-    '/models/FlightHelmet/glTF/FlightHelmet.gltf',
-    // '/models/Plan/glTF/Plan.gltf',
+    // '/models/FlightHelmet/glTF/FlightHelmet.gltf',
+    '/models/Plan/glTF/Plan.gltf',
     (gltf) =>
     {
-//         console.log(gltf.scene);
-//         while(gltf.scene.children.length)
-//         {
-//     scene.add(gltf.scene.children[0])
 
-// }
 
 const children = [...gltf.scene.children]
 for(const child of children)
