@@ -27,7 +27,7 @@ const scene = new THREE.Scene()
 const gltfLoader = new GLTFLoader()
 
 gltfLoader.load(
-    // '/models/Man/glTF/Man.gltf',
+    '/models/Man/glTF/Man.gltf',
     // '/models/Duck/glTF/Duck.gltf',
     // '/models/FlightHelmet/glTF/FlightHelmet.gltf',
     '/models/Plan/glTF/Plan.gltf',

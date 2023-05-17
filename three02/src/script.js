@@ -124,18 +124,23 @@ const Renderer = new THREE.WebGLRenderer({
 });
 Renderer.setSize(sizes.width, sizes.height);
 
-// Reduce the Past Time
-const clock = new THREE.Clock();
+
 
 // Controls
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 
+// Reduce the Past Time
+const clock = new THREE.Clock();
+let previousTime = 0
 // Animation
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
+  const deltaTime = elapsedTime - previousTime
+   previousTime = elapsedTime 
+ 
 
-  // mesh.rotation.y =  elapsedTime
+  // mesh.rotation.y =  deltaTime
 
   // Update camera
   // camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 2;
