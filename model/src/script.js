@@ -1,161 +1,191 @@
-import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import * as dat from 'lil-gui'
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
+import * as dat from "lil-gui";
 
 /**
  * Base
  */
 // Debug
-const gui = new dat.GUI()
+const gui = new dat.GUI();
 
 // Canvas
-const canvas = document.querySelector('canvas.webgl')
+const canvas = document.querySelector("canvas.webgl");
 
 // Scene
-const scene = new THREE.Scene()
-
-
-
-
-
-
-
-
+const scene = new THREE.Scene();
 
 // model
-const gltfLoader = new GLTFLoader()
+const dracoloader = new DRACOLoader();
+dracoloader.setDecoderPath("/draco/");
+
+const gltfLoader = new GLTFLoader();
+gltfLoader.setDRACOLoader(dracoloader);
+
+let mixer = null;
 
 gltfLoader.load(
-    '/models/Man/glTF/Man.gltf',
-    // '/models/Duck/glTF/Duck.gltf',
-    // '/models/FlightHelmet/glTF/FlightHelmet.gltf',
-    '/models/Plan/glTF/Plan.gltf',
-    (gltf) =>
-    {
+  "/models/Man/glTF/Man.gltf",
 
+  (gltf) => {
+    const model = gltf.scene;
 
-const children = [...gltf.scene.children]
-for(const child of children)
-{
-    scene.add(child)
-}
-    }
+    model.rotation.y = 0.27
+   
+    scene.add(model);
 
-)
+    const target = new THREE.Object3D()
+   scene.add(target);
+    mixer = new THREE.AnimationMixer(model);
+    const action = mixer.clipAction(gltf.animations[0]);
 
+    action.play();
 
-
-
-
-
-
-
-
-
-
-
-
+    gui.add(model.rotation, "y").min(-3).max(3).step(0.01).name("model y");
+    //   gui.add(model.rotation, "x")
+    //   .min(-3)
+    //   .max(3)
+    //   .step(0.01)
+    //   .name('model x')
+  }
+);
 
 /**
  * Floor
  */
-const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(10, 10),
-    new THREE.MeshStandardMaterial({
-        color: '#444444',
-        metalness: 0,
-        roughness: 0.5
-    })
-)
-floor.receiveShadow = true
-floor.rotation.x = - Math.PI * 0.5
-scene.add(floor)
+// const floor = new THREE.Mesh(
+//     new THREE.PlaneGeometry(10, 10),
+//     new THREE.MeshStandardMaterial({
+//         color: '#444444',
+//         metalness: 0,
+//         roughness: 0.5
+//     })
+// )
+// floor.receiveShadow = true
+// floor.rotation.x = - Math.PI * 0.5
+// scene.add(floor)
 
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.8)
-scene.add(ambientLight)
+const ambientLight = new THREE.AmbientLight(0xffffff, 2);
+ambientLight.castShadow = false;
+scene.add(ambientLight);
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6)
-directionalLight.castShadow = true
-directionalLight.shadow.mapSize.set(1024, 1024)
-directionalLight.shadow.camera.far = 15
-directionalLight.shadow.camera.left = - 7
-directionalLight.shadow.camera.top = 7
-directionalLight.shadow.camera.right = 7
-directionalLight.shadow.camera.bottom = - 7
-directionalLight.position.set(5, 5, 5)
-scene.add(directionalLight)
+const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+directionalLight.castShadow = true;
+directionalLight.frustumCulled = true;
+
+directionalLight.isLight = true;
+directionalLight.isObject3D = true;
+
+directionalLight.position.set(0.12, 1.67, 3);
+// gui.add(directionalLight.position, "y")
+// .min(-3)
+// .max(3)
+// .step(0.01)
+// .name('L')
+// gui.add(directionalLight.position, "x")
+// .min(-3)
+// .max(3)
+// .step(0.01)
+// .name('L')
+// gui.add(directionalLight.position, "z")
+// .min(-3)
+// .max(3)
+// .step(0.01)
+// .name('L')
+scene.add(directionalLight);
 
 /**
  * Sizes
  */
 const sizes = {
-    width: window.innerWidth,
-    height: window.innerHeight
-}
+  width: window.innerWidth,
+  height: window.innerHeight,
+};
 
-window.addEventListener('resize', () =>
-{
-    // Update sizes
-    sizes.width = window.innerWidth
-    sizes.height = window.innerHeight
+// Cursor
+const cursor = {
+  x: 0,
+  y: 0,
+};
+window.addEventListener("mousemove", (e) => {
+  cursor.x = e.clientX / sizes.width - 0.5;
+  cursor.y = -(e.clientY / sizes.height - 0.5);
+  
+});
 
-    // Update camera
-    camera.aspect = sizes.width / sizes.height
-    camera.updateProjectionMatrix()
+window.addEventListener("resize", () => {
+  // Update sizes
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight;
 
-    // Update renderer
-    renderer.setSize(sizes.width, sizes.height)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-})
+  // Update camera
+  camera.aspect = sizes.width / sizes.height;
+  camera.updateProjectionMatrix();
+
+  // Update renderer
+  renderer.setSize(sizes.width, sizes.height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
 
 /**
  * Camera
  */
 // Base camera
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.set(2, 2, 2)
-scene.add(camera)
+const camera = new THREE.PerspectiveCamera(
+  75,
+  sizes.width / sizes.height,
+  0.1,
+  100
+);
+camera.position.y = 2;
+camera.position.z = 2;
+scene.add(camera);
+
+gui.add(camera.position, "x").min(-3).max(30).step(0.01).name("camera x");
+gui.add(camera.position, "y").min(-3).max(30).step(0.01).name("camera y");
+gui.add(camera.position, "z").min(-3).max(30).step(0.01).name("camera z");
 
 // Controls
-const controls = new OrbitControls(camera, canvas)
-controls.target.set(0, 0.75, 0)
-controls.enableDamping = true
 
 /**
  * Renderer
  */
 const renderer = new THREE.WebGLRenderer({
-    canvas: canvas
-})
-renderer.shadowMap.enabled = true
-renderer.shadowMap.type = THREE.PCFSoftShadowMap
-renderer.setSize(sizes.width, sizes.height)
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+  canvas: canvas,
+});
+renderer.setClearColor("#242526");
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.setSize(sizes.width, sizes.height);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 /**
  * Animate
  */
-const clock = new THREE.Clock()
-let previousTime = 0
+const clock = new THREE.Clock();
+let previousTime = 0;
 
-const tick = () =>
-{
-    const elapsedTime = clock.getElapsedTime()
-    const deltaTime = elapsedTime - previousTime
-    previousTime = elapsedTime
+const tick = () => {
+  const elapsedTime = clock.getElapsedTime();
+  const deltaTime = elapsedTime - previousTime;
+  previousTime = elapsedTime;
 
-    // Update controls
-    controls.update()
+  // update mixer
+  if (mixer) {
+    mixer.update(deltaTime);
+  }
 
-    // Render
-    renderer.render(scene, camera)
+  // Update camera
+ 
+  // Render
+  renderer.render(scene, camera);
 
-    // Call tick again on the next frame
-    window.requestAnimationFrame(tick)
-}
+  // Call tick again on the next frame
+  window.requestAnimationFrame(tick);
+};
 
-tick()
+tick();
