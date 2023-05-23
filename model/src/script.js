@@ -24,12 +24,12 @@ const gltfLoader = new GLTFLoader();
 gltfLoader.setDRACOLoader(dracoloader);
 
 let mixer = null;
-
+let model;
 gltfLoader.load(
   "/models/Man/glTF/Man.gltf",
 
   (gltf) => {
-    const model = gltf.scene;
+     model = gltf.scene;
 
     model.rotation.y = 0.27
    
@@ -112,7 +112,7 @@ const cursor = {
   y: 0,
 };
 window.addEventListener("mousemove", (e) => {
-  cursor.x = e.clientX / sizes.width - 0.5;
+  cursor.x = - (e.clientX / sizes.width - 0.5);
   cursor.y = -(e.clientY / sizes.height - 0.5);
   
 });
@@ -180,8 +180,14 @@ const tick = () => {
   }
 
   // Update camera
+ if(model)
+ {
+  
+ model.rotation.y = cursor.x * 0.8;
+
+ }
  
-  // Render
+// Render
   renderer.render(scene, camera);
 
   // Call tick again on the next frame
