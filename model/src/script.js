@@ -156,8 +156,9 @@ gui.add(camera.position, "z").min(-3).max(30).step(0.01).name("camera z");
  */
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
+  alpha : true
 });
-renderer.setClearColor("#242526");
+
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.setSize(sizes.width, sizes.height);

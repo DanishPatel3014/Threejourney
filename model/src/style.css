@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
 *
 {
     margin: 0;
@@ -7,14 +8,53 @@
 html,
 body
 {
-    overflow: hidden;
+    overflow-x: hidden;
+    font-family: 'Orbitron', sans-serif;
 }
 
 .webgl
 {
-    position: fixed;
+    
     top: 0;
     left: 0;
     outline: none;
    
+}
+.hero
+{
+    position: relative;
+    background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
+    z-index: 1;
+}
+.loop
+{
+    display: flex;
+    position: absolute;
+    top: 40%;
+    height: 200px;
+    width: 100%;
+    font-size: 100px;
+    white-space: nowrap;
+    background-color: red;
+    z-index: -1;
+}
+.loop>h1{
+    font-weight: 400;
+    animation-name: anim;
+    animation-duration: 15s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+.loop>h1>span{
+    -webkit-text-stroke: 1.2px #000;
+    color: transparent;
+    font-weight: 500;
+}
+@keyframes anim{
+    0%{
+        transform: translateX(0%);
+    }
+    100%{
+        transform: translateX(-100%);
+    }
 }
