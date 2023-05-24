@@ -4,14 +4,12 @@
     margin: 0;
     padding: 0;
 }
-
 html,
 body
 {
     overflow-x: hidden;
     font-family: 'Orbitron', sans-serif;
 }
-
 .webgl
 {
     
@@ -23,8 +21,14 @@ body
 .hero
 {
     position: relative;
-    background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
+    /* background-color: #000; */
+    background-image: url('/img/1.webp');
+    /* background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12); */
     z-index: 1;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 .loop
 {
@@ -35,7 +39,7 @@ body
     width: 100%;
     font-size: 100px;
     white-space: nowrap;
-    background-color: red;
+    background-color: #4392f375;
     z-index: -1;
 }
 .loop>h1{
@@ -44,9 +48,10 @@ body
     animation-duration: 15s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
+    color: #fff;
 }
 .loop>h1>span{
-    -webkit-text-stroke: 1.2px #000;
+    -webkit-text-stroke: 2px #fff;
     color: transparent;
     font-weight: 500;
 }

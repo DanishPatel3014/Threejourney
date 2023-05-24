@@ -32,7 +32,7 @@ gltfLoader.load(
      model = gltf.scene;
 
     model.rotation.y = 0.27
-   
+   console.log(model);
     scene.add(model);
 
     const target = new THREE.Object3D()
@@ -50,6 +50,9 @@ gltfLoader.load(
     //   .name('model x')
   }
 );
+// Material
+const material = new THREE.MeshStandardMaterial()
+material.roughness = 0.4
 
 /**
  * Floor
@@ -69,9 +72,11 @@ gltfLoader.load(
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 2);
+const ambientLight = new THREE.AmbientLight(0xfffff, 1);
 ambientLight.castShadow = false;
 scene.add(ambientLight);
+
+
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
 directionalLight.castShadow = true;
@@ -81,22 +86,25 @@ directionalLight.isLight = true;
 directionalLight.isObject3D = true;
 
 directionalLight.position.set(0.12, 1.67, 3);
-// gui.add(directionalLight.position, "y")
-// .min(-3)
-// .max(3)
-// .step(0.01)
-// .name('L')
-// gui.add(directionalLight.position, "x")
-// .min(-3)
-// .max(3)
-// .step(0.01)
-// .name('L')
-// gui.add(directionalLight.position, "z")
-// .min(-3)
-// .max(3)
-// .step(0.01)
-// .name('L')
+gui.add(directionalLight.position, "y")
+.min(-3)
+.max(3)
+.step(0.01)
+.name('L')
+gui.add(directionalLight.position, "x")
+.min(-3)
+.max(3)
+.step(0.01)
+.name('L')
+gui.add(directionalLight.position, "z")
+.min(-3)
+.max(3)
+.step(0.01)
+.name('L')
 scene.add(directionalLight);
+
+// Material
+
 
 /**
  * Sizes
@@ -141,8 +149,8 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100
 );
-camera.position.y = 2;
-camera.position.z = 2;
+camera.position.y = 2.12;
+camera.position.z = 1.6;
 scene.add(camera);
 
 gui.add(camera.position, "x").min(-3).max(30).step(0.01).name("camera x");
@@ -150,7 +158,9 @@ gui.add(camera.position, "y").min(-3).max(30).step(0.01).name("camera y");
 gui.add(camera.position, "z").min(-3).max(30).step(0.01).name("camera z");
 
 // Controls
-
+// Controls
+// const controls = new OrbitControls(camera, canvas)
+// controls.enableDamping = true
 /**
  * Renderer
  */
@@ -159,8 +169,11 @@ const renderer = new THREE.WebGLRenderer({
   alpha : true
 });
 
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+// renderer.shadowMap.enabled = true;
+// renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.LinearToneMapping;
+renderer.toneMappingExposure = 1;
+renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
@@ -187,6 +200,8 @@ const tick = () => {
  model.rotation.y = cursor.x * 0.8;
 
  }
+ // Update controls
+//  controls.update()
  
 // Render
   renderer.render(scene, camera);
