@@ -127,7 +127,7 @@ window.addEventListener("mousemove", (e) => {
 
 window.addEventListener("resize", () => {
   // Update sizes
-  sizes.width = wic ndow.innerWidth;
+  sizes.width = window.innerWidth; 
   sizes.height = window.innerHeight;
 
   // Update camera
