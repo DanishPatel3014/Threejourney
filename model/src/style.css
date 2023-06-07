@@ -9,6 +9,7 @@ body
 {
     overflow-x: hidden;
     font-family: 'Orbitron', sans-serif;
+    cursor: none;
 }
 .webgl
 {
@@ -21,9 +22,7 @@ body
 .hero
 {
     position: relative;
-    /* background-color: #000; */
     background-image: url('/img/1.webp');
-    /* background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12); */
     z-index: 1;
     background-attachment: fixed;
     background-position: center;
@@ -63,3 +62,23 @@ body
         transform: translateX(-100%);
     }
 }
+/* cursor */
+body .cursor {
+    pointer-events: none;
+  }
+body .cursor__ball {
+    position: absolute;
+    top: 0;
+    left: 0;
+    mix-blend-mode: difference;
+    z-index: 1000;
+  }
+body .cursor__ball circle {
+    fill: #f7f8fa;
+  }
+
+ 
+
+
+  
+/* cursor */

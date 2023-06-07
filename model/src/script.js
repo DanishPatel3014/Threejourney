@@ -3,6 +3,8 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import * as dat from "lil-gui";
+import { gsap } from "gsap";
+import { TweenMax } from "gsap/gsap-core";
 
 /**
  * Base
@@ -29,14 +31,14 @@ gltfLoader.load(
   "/models/Man/glTF/Man.gltf",
 
   (gltf) => {
-     model = gltf.scene;
+    model = gltf.scene;
 
-    model.rotation.y = 0.27
-   console.log(model);
+    model.rotation.y = 0.27;
+    console.log(model);
     scene.add(model);
 
-    const target = new THREE.Object3D()
-   scene.add(target);
+    const target = new THREE.Object3D();
+    scene.add(target);
     mixer = new THREE.AnimationMixer(model);
     const action = mixer.clipAction(gltf.animations[0]);
 
@@ -51,8 +53,8 @@ gltfLoader.load(
   }
 );
 // Material
-const material = new THREE.MeshStandardMaterial()
-material.roughness = 0.4
+const material = new THREE.MeshStandardMaterial();
+material.roughness = 0.4;
 
 /**
  * Floor
@@ -76,8 +78,6 @@ const ambientLight = new THREE.AmbientLight(0xfffff, 1);
 ambientLight.castShadow = false;
 scene.add(ambientLight);
 
-
-
 const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
 directionalLight.castShadow = true;
 directionalLight.frustumCulled = true;
@@ -86,25 +86,12 @@ directionalLight.isLight = true;
 directionalLight.isObject3D = true;
 
 directionalLight.position.set(0.12, 1.67, 3);
-gui.add(directionalLight.position, "y")
-.min(-3)
-.max(3)
-.step(0.01)
-.name('L')
-gui.add(directionalLight.position, "x")
-.min(-3)
-.max(3)
-.step(0.01)
-.name('L')
-gui.add(directionalLight.position, "z")
-.min(-3)
-.max(3)
-.step(0.01)
-.name('L')
+gui.add(directionalLight.position, "y").min(-3).max(3).step(0.01).name("L");
+gui.add(directionalLight.position, "x").min(-3).max(3).step(0.01).name("L");
+gui.add(directionalLight.position, "z").min(-3).max(3).step(0.01).name("L");
 scene.add(directionalLight);
 
 // Material
-
 
 /**
  * Sizes
@@ -120,14 +107,13 @@ const cursor = {
   y: 0,
 };
 window.addEventListener("mousemove", (e) => {
-  cursor.x = - (e.clientX / sizes.width - 0.5);
+  cursor.x = -(e.clientX / sizes.width - 0.5);
   cursor.y = -(e.clientY / sizes.height - 0.5);
-  
 });
 
 window.addEventListener("resize", () => {
   // Update sizes
-  sizes.width = window.innerWidth; 
+  sizes.width = window.innerWidth;
   sizes.height = window.innerHeight;
 
   // Update camera
@@ -166,7 +152,7 @@ gui.add(camera.position, "z").min(-3).max(30).step(0.01).name("camera z");
  */
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
-  alpha : true
+  alpha: true,
 });
 
 // renderer.shadowMap.enabled = true;
@@ -194,16 +180,13 @@ const tick = () => {
   }
 
   // Update camera
- if(model)
- {
-  
- model.rotation.y = cursor.x * 0.8;
+  if (model) {
+    model.rotation.y = cursor.x * 0.8;
+  }
+  // Update controls
+  //  controls.update()
 
- }
- // Update controls
-//  controls.update()
- 
-// Render
+  // Render
   renderer.render(scene, camera);
 
   // Call tick again on the next frame
@@ -211,3 +194,45 @@ const tick = () => {
 };
 
 tick();
+
+
+
+
+
+
+// cursor
+const $bigBall = document.querySelector('.cursor__ball--big');
+const $smallBall = document.querySelector('.cursor__ball--small');
+const $hoverables = document.querySelectorAll('.hoverable');
+
+// Listeners
+document.body.addEventListener('mousemove', onMouseMove);
+for (let i = 0; i < $hoverables.length; i++) {
+  $hoverables[i].addEventListener('mouseenter', onMouseHover);
+  $hoverables[i].addEventListener('mouseleave', onMouseHoverOut);
+}
+
+// Move the cursor
+function onMouseMove(e) {
+  TweenMax.to($bigBall, .4, {
+    x: e.pageX - 15,
+    y: e.pageY - 15
+  })
+  TweenMax.to($smallBall, .1, {
+    x: e.pageX - 5,
+    y: e.pageY - 7
+  })
+}
+
+// Hover an element
+function onMouseHover() {
+  TweenMax.to($bigBall, .3, {
+    scale: 4
+  })
+}
+function onMouseHoverOut() {
+  TweenMax.to($bigBall, .3, {
+    scale: 1
+  })
+}
+// cursor
